@@ -1,7 +1,7 @@
 # Czyste Energie i Ochrona Środowiska
-Laboratorium 2
+Laboratorium 3
 
-Karolina Piotrowska, 6.04.2026
+Karolina Piotrowska, 20.04.2026
 
 ## 1. Co to jest współczynnik PR i dlaczego nie wynosi 100%
 Współczynnik PR (Performance Ratio) to miara efektywności instalacji fotowoltaicznej, określająca stosunek energii faktycznie wyprodukowanej do tej, którą system wygenerowałby w warunkach idealnych.
@@ -26,13 +26,14 @@ Na podstawie danych z PVGIS oraz map SolarGIS można wskazać wyraźny gradient 
 * **Portugalia** – ok. **1640–1760 kWh/m²/rok**; Alentejo i Algarve należą do najbardziej słonecznych regionów Europy Zachodniej.
 
 **Kraje o najmniejszym potencjale:**
+* **Islandia** – ok. **700–900 kWh/m²/rok**; najniższe wartości w Europie — położenie na granicy koła podbiegunowego, bardzo duże zachmurzenie i częste mgły.
 * **Norwegia** – ok. **950 kWh/m²/rok** (Oslo); wysokie szerokości geograficzne, krótkie dni zimowe i częste zachmurzenie.
 * **Wielka Brytania** – ok. **920–1070 kWh/m²/rok** (Edynburg–Londyn); atlantycki klimat z dużym zachmurzeniem przez większą część roku.
 * **Finlandia** – ok. **984 kWh/m²/rok** (Helsinki); podobne ograniczenia jak Norwegia.
-* **Szwecja** – ok. **990–1107 kWh/m²/rok**; wyraźny gradient między północą a południem kraju.
 
-Różnica między najbardziej a najmniej nasłonecznionymi krajami wynosi ponad **100%** (Cypr ~1940 vs Norwegia ~950 kWh/m²/rok), co bezpośrednio przekłada się na opłacalność inwestycji w systemy PV.
+Różnica między najbardziej a najmniej nasłonecznionymi krajami wynosi ponad **150%** (Cypr ~1940 vs Islandia ~700–900 kWh/m²/rok), co bezpośrednio przekłada się na opłacalność inwestycji w systemy PV.
 
+![alt text](pvgis_analysis/figures/zad2-map.png)
 
 ## 3. Zakres optymalnych kątów nachylenia modułów fotowoltaicznych w Europie
 W celu wykonania zadania użyto otwartego API strony PVGIS. Umożliwia ono szybki i zautomatyzowany dostęp do danych znajdujących się na stronie. W języku Python napisano:
@@ -41,6 +42,7 @@ W celu wykonania zadania użyto otwartego API strony PVGIS. Umożliwia ono szybk
 * funkcje wizualizujące wyniki obliczeń na wykresach.
 
 ![alt text](pvgis_analysis/figures/q1_tilt_map.png)
+
 *Rys.1 Wykres zależności optymalnego kąta nachylenia modułu fotowoltaicznego od położenia geograficznego na terenie Europy*
 
 Na podstawie Rys.1 można stwierdzić, że optymalny kąt nachylenia modułu fotowoltaicznego zależy od **szerokości** geograficznej. Wniosek ten jest zgodny z oczekiwaniami - wysokość słońca nad horyzontem i kąt padania promieni słonecznych zależą właśnie od szerokości geograficznej. Zakres optymalnych kątów nachylenia dla Europy to **~26°-51°** ze średnią wartością optymalnego kąta **39,2°**.
@@ -49,6 +51,7 @@ Na podstawie Rys.1 można stwierdzić, że optymalny kąt nachylenia modułu fot
 W celu wykonania zadania ponownie posłużono się danymi zebranymi dzięki otwartemu API. 
 
 ![alt text](pvgis_analysis/figures/q2_tilt_vs_lat.png)
+
 *Rys.2 Wykres zależności optymalnego kąta nachylenia od szerokości geograficznej*
 
 Wykonano dwa modele:
@@ -82,12 +85,14 @@ Do analizy wykorzystano tracker jednoosiowy nachylony z optymalnym kątem osi (`
 Zakres przyrostu produkcji energii w Europie wynosi od **ok. -4% do ok. +27%**, ze średnią wartością **17.3%**. Wartości ujemne (sporadyczne, poniżej zera) pojawiają się w punktach z bardzo wysokim udziałem promieniowania rozproszonego i dużym zachmurzeniem, gdzie straty mechaniczne trackera mogą przewyższyć zyski ze śledzenia.
 
 ![alt text](pvgis_analysis/figures/q4_tracker_gain_map.png)
+
 *Rys.3 Mapa przyrostu produkcji energii dzięki zastosowaniu trackera jednoosiowego w Europie*
 
 ![alt text](pvgis_analysis/figures/q4_tracker_gain_by_country.png)
+
 *Rys.4 Przyrost produkcji energii dla poszczególnych krajów (słupki błędów = zakres min–max)*
 
-**Kraje z największym przyrostem:**
+*Tab. 2 Kraje z największym przyrostem:*
 
 | Kraj | Średni przyrost | Zakres |
 |---|---|---|
@@ -97,25 +102,25 @@ Zakres przyrostu produkcji energii w Europie wynosi od **ok. -4% do ok. +27%**, 
 | Turcja | 18.4% | 11.6% – 22.6% |
 | Włochy | 18.4% | 9.8% – 22.9% |
 
-**Dlaczego kraje południowe osiągają większy przyrost?**
+Główną przyczyną większego przyrostu dla krajów południowych jest wyższy udział promieniowania bezpośredniego w stosunku do promieniowania rozproszonego. W krajach śródziemnomorskich niebo jest bezchmurne przez znaczną część roku, a promieniowanie słoneczne jest głównie bezpośrednie. Tracker maksymalizuje zyski właśnie na promieniowaniu bezpośrednim – przez cały dzień utrzymuje optymalny kąt padania promieni na moduł. W krajach o klimacie atlantyckim i kontynentalnym (Niemcy, Polska, Wielka Brytania) zachmurzenie jest częste i promieniowanie rozproszone stanowi większy odsetek całkowitego; tracker ma wówczas mniejszy wpływ na wynik.
 
-Główną przyczyną jest **wyższy udział promieniowania bezpośredniego (DNI)** w stosunku do promieniowania rozproszonego (DHI). W krajach śródziemnomorskich niebo jest bezchmurne przez znaczną część roku, a promieniowanie słoneczne jest głównie bezpośrednie. Tracker maksymalizuje zyski właśnie na promieniowaniu bezpośrednim – przez cały dzień utrzymuje optymalny kąt padania promieni na moduł. W krajach o klimacie atlantyckim i kontynentalnym (Niemcy, Polska, Wielka Brytania) zachmurzenie jest częste i promieniowanie rozproszone stanowi większy odsetek całkowitego; tracker ma wówczas mniejszy wpływ na wynik.
+Wysoka średnia wartość przyrostu dla Norwegii (18.7%) oraz najwyższy wynik w całej Europie (26.6%) wynikają ze specyfiki bardzo wysokich szerokości geograficznych (powyżej 65°N). W lecie słońce nie zachodzi i zatacza niski łuk przez całą dobę — tracker śledzący ruch słońca w płaszczyźnie horyzontalnej może uchwycić znacznie więcej energii niż panel skierowany stale na południe.
 
-**Uwaga dotycząca Norwegii:** Wysoka średnia wartość przyrostu dla Norwegii (18.7%) oraz najwyższy wynik w całej Europie (26.6%) wynikają ze specyfiki bardzo wysokich szerokości geograficznych (powyżej 65°N). W lecie słońce nie zachodzi i zatacza niski łuk przez całą dobę — tracker śledzący ruch słońca w płaszczyźnie horyzontalnej może uchwycić znacznie więcej energii niż panel skierowany stale na południe.
-
-**Polska:** Średni przyrost produkcji energii dzięki zastosowaniu trackera jednoosiowego wynosi w Polsce **~15%**. Jest to wartość niższa niż dla krajów południa Europy, lecz wciąż ekonomicznie istotna w przypadku większych instalacji naziemnych.
+Średni przyrost produkcji energii dzięki zastosowaniu trackera jednoosiowego wynosi w Polsce **~15%**. Jest to wartość niższa niż dla krajów południa Europy, lecz wciąż ekonomicznie istotna w przypadku większych instalacji naziemnych.
 
 ## 7. Porównanie dostępności energii słonecznej w polskich miastach z innymi europejskimi miastami
 
-Do porównania wybrano 10 polskich miast oraz 30 miast z pozostałych krajów Europy. Dla każdego miasta zebrano miesięczne sumy napromieniowania poziomego (GHI) z API PVGIS i obliczono roczną sumę.
+Do porównania wybrano 10 polskich miast oraz 30 miast z pozostałych krajów Europy. Dla każdego miasta zebrano miesięczne sumy napromieniowania poziomego z API PVGIS i obliczono roczną sumę.
 
 ![alt text](pvgis_analysis/figures/q5_city_comparison.png)
+
 *Rys.5 Roczna suma napromieniowania w europejskich miastach pogrupowanych według kraju*
 
 ![alt text](pvgis_analysis/figures/q5_poland_vs_europe.png)
+
 *Rys.6 Porównanie średnich wartości nasłonecznienia i jednorodności warunków w poszczególnych krajach*
 
-**Wartości średnie i miejsca w rankingu europejskim:**
+*Tab. 3 Wartości średnie i miejsca w rankingu europejskim:*
 
 | Kraj | Średnia (kWh/m²/rok) | CV (jednorodność) |
 |---|---|---|
@@ -133,27 +138,20 @@ Do porównania wybrano 10 polskich miast oraz 30 miast z pozostałych krajów Eu
 
 *CV – współczynnik zmienności (odchylenie standardowe / średnia × 100%); niższy CV oznacza bardziej jednorodne warunki w skali kraju.*
 
-**Polska na tle Europy:**
-
 Polska osiąga roczną sumę napromieniowania ok. **1118 kWh/m²/rok**, co plasuje ją poniżej środka stawki europejskiej — wyraźnie poniżej krajów śródziemnomorskich, lecz powyżej Skandynawii i Wysp Brytyjskich.
 
-**Jednorodność warunków słonecznych:**
+Kluczowym wyróżnikiem Polski jest wyjątkowo niski współczynnik zmienności wynoszący zaledwie **2.7%** — najniższy spośród wszystkich krajów reprezentowanych przez więcej niż jedno miasto. Roczna suma GHI w polskich miastach zawiera się w przedziale 1064 kWh/m²/rok (Szczecin) – 1148 kWh/m²/rok (Lublin), co stanowi różnicę zaledwie ~84 kWh/m²/rok (~8%). Słabszymi warunkami charakteryzują się miasta północno-zachodnie (Szczecin, Gdańsk) i północno-wschodnie (Białystok), najlepszymi – miasta południowe i środkowe (Lublin, Wrocław, Rzeszów, Kraków).
 
-Kluczowym wyróżnikiem Polski jest wyjątkowo niski współczynnik zmienności wynoszący zaledwie **2.7%** — najniższy spośród wszystkich krajów reprezentowanych przez więcej niż jedno miasto. Roczna suma GHI w polskich miastach zawiera się w przedziale **1064 kWh/m²/rok (Szczecin) – 1148 kWh/m²/rok (Lublin)**, co stanowi różnicę zaledwie **~84 kWh/m²/rok** (~8%). Słabszymi warunkami charakteryzują się miasta północno-zachodnie (Szczecin, Gdańsk) i północno-wschodnie (Białystok), najlepszymi – miasta południowe i środkowe (Lublin, Wrocław, Rzeszów, Kraków).
-
-Dla porównania:
-* **Włochy** (CV = 8.5%): Mediolan ~1470 vs Palermo ~1740 kWh/m²/rok — różnica ~270 kWh/m²/rok (~18%). Wyraźny podział na północ i południe.
-* **Wielka Brytania** (CV = 8.2%): Edynburg ~923 vs Londyn ~1070 kWh/m²/rok — różnica ~147 kWh/m²/rok (~16%). Gradient południe–północ.
-* **Francja** (CV = 22.6%): Paryż ~1223 vs Marsylia ~1689 kWh/m²/rok — różnica ~466 kWh/m²/rok (~38%). Ogromna różnica między północą a słonecznym Prowansją.
-
-**Wniosek:** Polska wyróżnia się na tle Europy **bardzo jednorodnymi warunkami słonecznymi** w całym kraju. Wynika to z relatywnie płaskiej rzeźby terenu i braku silnych efektów klimatycznych różnicujących regiony (brak wybrzeża śródziemnomorskiego z jednej strony i wysokich gór z drugiej). W odróżnieniu od Włoch, Francji czy Wielkiej Brytanii, planując instalację PV w Polsce, nie trzeba uwzględniać istotnych regionalnych różnic w uzysku energii.
+Polska wyróżnia się na tle Europy bardzo jednorodnymi warunkami słonecznymi w całym kraju. Wynika to z relatywnie płaskiej rzeźby terenu i braku silnych efektów klimatycznych różnicujących regiony (brak wybrzeża śródziemnomorskiego z jednej strony i wysokich gór z drugiej). W odróżnieniu od Włoch, Francji czy Wielkiej Brytanii, planując instalację PV w Polsce, nie trzeba uwzględniać istotnych regionalnych różnic w uzysku energii.
 
 
 ## 8. Dostępność energii słonecznej w Europie i na innych kontynentach
 
-Na podstawie map GHI dostępnych w portalu [SolarGIS](https://solargis.com/resources/free-maps-and-gis-data) oraz danych z [Global Solar Atlas](https://globalsolaratlas.info/) można porównać roczną sumę napromieniowania poziomego (GHI) dla różnych kontynentów i regionów świata.
+Na podstawie map GHI dostępnych w portalu [SolarGIS](https://solargis.com/resources/free-maps-and-gis-data) można porównać roczną sumę napromieniowania poziomego (GHI) dla różnych kontynentów i regionów świata.
 
-**Zestawienie regionalne (roczna suma GHI, kWh/m²/rok):**
+![alt text](pvgis_analysis/figures/zad8-map2.png)
+
+*Tab. 4 Zestawienie regionalne (roczna suma GHI, kWh/m²/rok):*
 
 | Region | Zakres GHI | Charakterystyka |
 |---|---|---|
@@ -167,19 +165,11 @@ Na podstawie map GHI dostępnych w portalu [SolarGIS](https://solargis.com/resou
 | **Europa Środkowa (Polska)** | 1000–1200 | Umiarkowane warunki; dominacja promieniowania rozproszonego w miesiącach zimowych |
 | **Europa Północna / Skandynawia** | 700–1100 | Najniższe wartości w Europie; krótkie dni zimowe, duże zachmurzenie |
 
-**Wnioski z porównania:**
-
-1. **Europa jest regionem o przeciętnym potencjale solarnym w skali globalnej.** Nawet najlepiej nasłonecznione kraje południa Europy (Cypr ~1940 kWh/m²/rok) osiągają wartości o 30–40% niższe niż obszary Sahary czy Bliskiego Wschodu.
-
-2. **Najbardziej uprzywilejowane strefy to tropikalne i subtropikalne pustynie** — Sahara, Pustynia Arabska, Atacama i centrum Australii. Łączy je niskie zachmurzenie, suche powietrze (mała absorpcja promieniowania) oraz wysoki kąt padania słońca przez cały rok.
-
-3. **Australia jest wyjątkowa jako cały kontynent** — większość jego powierzchni przekracza 1800 kWh/m²/rok, co czyni ją najbardziej jednorodnie słonecznym zamieszkałym kontynentem.
-
-4. **Polska i Europa Środkowa** uzyskują ok. 40–60% potencjału solarnego obszarów saharyńskich, co wciąż czyni instalacje PV ekonomicznie uzasadnionymi — szczególnie dzięki spadkowi kosztów paneli i efektywnym systemom wsparcia.
+Europa jest regionem o przeciętnym potencjale solarnym w skali globalnej. Nawet najlepiej nasłonecznione kraje południa Europy (Cypr ~1940 kWh/m²/rok) osiągają wartości o 30–40% niższe niż obszary Sahary czy Bliskiego Wschodu. Najbardziej uprzywilejowane strefy to tropikalne i subtropikalne pustynie — Sahara, Pustynia Arabska, Atacama i centrum Australii. Łączy je niskie zachmurzenie, suche powietrze (mała absorpcja promieniowania) oraz wysoki kąt padania słońca przez cały rok. Australia jest wyjątkowa jako cały kontynent — większość jego powierzchni przekracza 1800 kWh/m²/rok, co czyni ją najbardziej jednorodnie słonecznym zamieszkałym kontynentem. Polska i Europa Środkowa uzyskują ok. 40–60% potencjału solarnego obszarów saharyńskich, co wciąż czyni instalacje PV ekonomicznie uzasadnionymi — szczególnie dzięki spadkowi kosztów paneli i efektywnym systemom wsparcia.
 
 ## 9. Zestawienie nasłonecznienia wybranych krajów Europy według danych SolarGIS
 
-*Wartości GHI i produkcji energii w kWh/m²/rok na podstawie map SolarGIS.*
+*Tab. 5 Wartości GHI i produkcji energii w kWh/m²/rok*
 
 | Kraj | GHI min | GHI max | Produkcja min | Produkcja max | Uwagi |
 |---|---|---|---|---|---|
@@ -195,20 +185,20 @@ Na podstawie map GHI dostępnych w portalu [SolarGIS](https://solargis.com/resou
 | Polska | 1000 | 1150 | >825 | >975 | Bardzo jednolite warunki; minima na terenach górzystych |
 
 ## 10. Polityka wsparcia a rozwój rynku PV — przykład Niemiec i Hiszpanii
-Różnica w tempie rozwoju rynków niemieckiego i hiszpańskiego wynikała z niedostosowania sztywnych stawek taryf gwarantowanych do lokalnej irradiancji. W Niemczech system FiT zapewniał umiarkowaną rentowność, stymulując stabilny wzrost, podczas gdy w nasłonecznionej Hiszpanii te same stawki wygenerowały nienaturalnie wysokie zyski, prowadząc do spekulacyjnego boomu. Ponieważ koszty taryf przerzucane są bezpośrednio na odbiorców końcowych w rachunkach za prąd, skala hiszpańskich inwestycji doprowadziła do gigantycznego deficytu taryfowego i destabilizacji finansów państwa. Ostatecznie Hiszpania została zmuszona do gwałtownego wycofania wsparcia, co w przeciwieństwie do stabilnego modelu niemieckiego, wywołało głęboki kryzys zaufania i załamanie tamtejszej branży PV.
+Taryfa gwarantowana (FiT) to instrument polityki energetycznej, w ramach którego producent energii z OZE (np. właściciel instalacji PV) ma zagwarantowane prawo do sprzedaży każdej wyprodukowanej kilowatogodziny do sieci publicznej po stałej, z góry ustalonej cenie, przez długi okres (zazwyczaj 15–25 lat). Stawka FiT jest odgórnie ustalana przez państwo i — w zamierzeniu — ma zapewnić rentowność inwestycji przy danym poziomie nasłonecznienia. Koszty systemu są następnie rozkładane na wszystkich odbiorców energii elektrycznej poprzez specjalną opłatę doliczaną do rachunków za prąd (tzw. surcharge/levy).
+
+* Niemcy (ok. 2006): Stawka FiT dla małych instalacji dachowych wynosiła ok. **0,50 €/kWh**, przy hurtowej cenie energii sieciowej ~0,04–0,06 €/kWh i cenie detalicznej ~0,17–0,19 €/kWh. Przy rocznej produkcji ok. 900–1100 kWh/kWp instalacja była rentowna, ale zyski były umiarkowane i przewidywalne. System stymulował stabilny, stopniowy wzrost rynku.
+
+* Hiszpania (ok. 2007–2008): Dekret królewski 661/2007 ustalił stawkę FiT na ok. **0,44 €/kWh** (dla instalacji naziemnych) — niemal identyczną jak w Niemczech. Jednak przy rocznej produkcji ok. 1600–1900 kWh/kWp (70–100% więcej niż w Niemczech) stopa zwrotu z inwestycji była nieproporcjonalnie wysoka — rzędu 20–30% rocznie. Wywołało to lawinę spekulacyjnych inwestycji: tylko w 2008 r. zainstalowano w Hiszpanii ok. 2,6 GW, czyli ponad połowę ówczesnych globalnych mocy PV.
+
+Koszty taryf gwarantowanych nie są finansowane z budżetu państwa bezpośrednio — są przerzucane na wszystkich odbiorców energii elektrycznej poprzez obowiązkowy narzut doliczany do każdego rachunku za prąd. Im więcej energii z OZE kupuje operator sieci po zawyżonych stawkach FiT, tym wyższy narzut płacą gospodarstwa domowe i przedsiębiorstwa. W Hiszpanii skala inwestycji była tak ogromna, że zobowiązania z tytułu FiT przekroczyły możliwości finansowe systemu — powstał tzw. deficyt taryfowy rzędu kilkudziesięciu miliardów euro. Państwo musiało się zadłużyć, aby regulować należności wobec producentów, a następnie gwałtownie ograniczyło lub retroaktywnie obniżyło stawki FiT. Zniszczyło to zaufanie inwestorów i doprowadziło do głębokiego kryzysu hiszpańskiej branży PV na kolejne lata.
+
+Ten sam mechanizm FiT działa prawidłowo tylko wtedy, gdy stawki są skalibrowane do lokalnej irradiancji. Przeniesienie stawek z kraju o gorszym nasłonecznieniu (Niemcy) do kraju o znacznie lepszym (Hiszpania) bez korekty równoznaczne jest z rozdawaniem nadmiernych subwencji finansowanych przez wszystkich konsumentów energii.
 
 ## 11. Wnioski
 
-1. **Optymalny kąt nachylenia modułów PV zależy niemal wyłącznie od szerokości geograficznej.** Analiza siatki punktów pomiarowych dla całej Europy wykazała korelację Pearsona między kątem a szerokością geograficzną na poziomie >0,97, podczas gdy korelacja z długością geograficzną jest pomijalnie mała. Model liniowy $tilt \approx 0{,}50 \cdot lat + 13{,}6°$ dobrze opisuje tę zależność. Wynika to bezpośrednio z geometrii ruchu Słońca — wysokość kulminacyjna Słońca nad horyzontem jest funkcją wyłącznie szerokości geograficznej i deklinacji.
+Fotowoltaika jest technologią, której efektywność w bardzo dużym stopniu zależy od geografii — i to nie tylko w oczywistym sensie „południe Europy jest lepsze od północy". Przeprowadzone analizy pokazują, że zasoby solarne kształtują niemal każdy aspekt projektowania i ekonomiki systemów PV: od optymalnego kąta nachylenia panelu, przez dobór technologii montażu, aż po kształt polityki wsparcia. Europa, mimo że w skali globalnej dysponuje jedynie umiarkowanym potencjałem solarnym — kilkukrotnie niższym niż obszary Sahary, Półwyspu Arabskiego czy centrum Australii — wciąż stanowi duży i rozwijający się rynek, co zawdzięcza przede wszystkim dynamicznemu spadkowi kosztów technologii oraz odpowiednim instrumentom politycznym.
 
-2. **Dla Polski optymalny kąt nachylenia wynosi około 38–40°**, co jest spójne zarówno z danymi z siatki pomiarowej (38,1° ± 2,5°), jak i z wynikami dla poszczególnych miast (39–41°). Wartości uzyskane ze wzoru matematycznego zgadzają się z danymi PVGIS z dokładnością do 1°, co potwierdza praktyczną przydatność modelu.
+Szczególnie interesującym przypadkiem na tle kontynentu jest Polska. Choć kraj ten nie wyróżnia się wysokim bezwzględnym nasłonecznieniem, jego wyjątkową cechą jest bardzo duża jednorodność warunków solarnych w skali całego terytorium — co jest rzadkością wśród krajów europejskich o porównywalnej powierzchni. Oznacza to, że w Polsce warunki dla rozwoju fotowoltaiki są podobne niezależnie od regionu, co sprzyja równomiernemu rozwojowi rynku i upraszcza planowanie inwestycji.
 
-3. **Europa wykazuje silny gradient nasłonecznienia z południa na północ.** Roczna suma GHI waha się od ~950 kWh/m²/rok (Oslo) do ~1940 kWh/m²/rok (Nikozja) — ponad dwukrotna różnica. Kraje śródziemnomorskie (Cypr, Malta, Hiszpania, Grecja, Portugalia) dysponują znacząco lepszymi warunkami niż Europa Środkowa i Północna.
-
-4. **Polska plasuje się w środku dolnej części europejskiego rankingu** (~1118 kWh/m²/rok), wyraźnie poniżej krajów śródziemnomorskich, lecz powyżej Skandynawii i Wysp Brytyjskich. Kluczową zaletą polskiego rynku PV jest jednak wyjątkowa jednorodność warunków w skali całego kraju — współczynnik zmienności CV wynosi zaledwie 2,7%, najniższy w Europie wśród krajów z wieloma miastami w analizie. Różnica między najlepiej (Lublin, Wrocław ~1148 kWh/m²/rok) a najsłabiej (Szczecin ~1064 kWh/m²/rok) nasłonecznionym miastem wynosi jedynie ~8%, co upraszcza planowanie inwestycji i ujednolica warunki prowadzenia biznesu w branży OZE w całym kraju.
-
-5. **Zastosowanie jednoosiowego trackera zwiększa produkcję energii w Polsce o około 15%.** W skali Europy przyrost ten mieści się w przedziale od ~–4% do ~+27%, przy czym największe korzyści odnoszą kraje o wysokim udziale promieniowania bezpośredniego (DNI) — Portugalia (~21%), Grecja (~20%), Włochy (~18%) i Hiszpania (~18%). Tracker jest najbardziej opłacalny tam, gdzie niebo jest bezchmurne przez większą część roku; przy dominacji promieniowania rozproszonego (zachmurzony klimat Polski czy Wielkiej Brytanii) zyski ze śledzenia są mniejsze.
-
-6. **W skali globalnej Europa dysponuje umiarkowanym potencjałem solarnym.** Regiony o najwyższym potencjale — Sahara, Półwysep Arabski, Atacama i centrum Australii — osiągają 2000–2800 kWh/m²/rok GHI, czyli 2–3 razy więcej niż Europa Środkowa. Mimo to instalacje PV są w Europie ekonomicznie uzasadnione dzięki gwałtownemu spadkowi kosztów technologii i odpowiednim instrumentom polityki energetycznej.
-
-7. **Polityka wsparcia musi uwzględniać lokalne warunki nasłonecznienia.** Przykład Niemiec i Hiszpanii pokazuje, że jednolite stawki taryf gwarantowanych (FiT), nieuwzględniające regionalnych różnic w irradiancji, mogą prowadzić do poważnych zaburzeń rynkowych. Projektując system wsparcia dla OZE, należy kalibrować stawki tak, aby zapewniały podobną rentowność inwestycji niezależnie od lokalizacji — lub stosować mechanizmy aukcyjne pozwalające rynkowi wycenić lokalny potencjał.
+Doświadczenia Niemiec i Hiszpanii z systemami taryf gwarantowanych są przestrogą o charakterze ogólniejszym: nawet dobrze zaprojektowany instrument wsparcia może przynieść odwrotne skutki, jeśli nie uwzględnia lokalnej specyfiki zasobów. Polityka energetyczna nie działa w próżni geograficznej — dane o nasłonecznieniu powinny być podstawą każdej decyzji regulacyjnej dotyczącej OZE.
